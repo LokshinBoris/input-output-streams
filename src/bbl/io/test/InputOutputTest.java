@@ -66,8 +66,8 @@ class InputOutputTest {
 	@Test
 	void printDirectoryTest() throws IOException
 	{
-		printDirectory("C:\\WORKER\\PARK10\\Desktop.ini",2);
-		printDirectory(".",-1);
+		// printDirectory("C:\\WORKER\\PARK10\\Desktop.ini",2);
+		printDirectory("C:\\",2);
 	}
 
 	public class MyFileVisitResult extends SimpleFileVisitor<Path>
@@ -81,8 +81,15 @@ class InputOutputTest {
 		@Override
 		public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) throws IOException
 		{
-			System.out.printf("%s %s <dir>\n", " ".repeat(shift*4), dir.getFileName().toString());
-			shift++;
+			if(dir.getNameCount()>0)
+			{
+				System.out.printf("%s %s <dir>\n", " ".repeat(shift*4), dir.getFileName().toString());
+				shift++;
+			}
+			else
+			{
+				System.out.printf("%s.\n"," ".repeat(shift*4));
+			}
 			return FileVisitResult.CONTINUE;
 		}
 
@@ -102,8 +109,10 @@ class InputOutputTest {
 		public FileVisitResult visitFileFailed(Path file, IOException exc) throws IOException 
 		{			
 			if(exc instanceof AccessDeniedException)
-			{
-				System.out.printf("%s %s <dir> access denied", " ".repeat(shift*4), file.getParent().getFileName().toString());				
+			{	
+				
+				String str=file.getNameCount()>1? file.getParent().getFileName().toString(): file.getFileName().toString();
+				System.out.printf("%s %s <dir> access denied\n", " ".repeat(shift*4), str);
 			}
 			return FileVisitResult.CONTINUE;
 		}
@@ -130,7 +139,7 @@ class InputOutputTest {
 		//      <name>
 		// using Files.walkFileTree
 		Path path= Path.of(dirPathStr).toAbsolutePath().normalize();
-		File mf=new File(path.toString());
+		 File mf=new File(path.toString());
 		if (mf.exists() && mf.isDirectory())
 		{	
 			MyFileVisitResult mfv=new MyFileVisitResult(0);  

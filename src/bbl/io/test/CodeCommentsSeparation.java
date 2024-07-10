@@ -34,6 +34,7 @@ public class CodeCommentsSeparation {
 		{
 			BufferedWriter code = new BufferedWriter(new FileWriter(codeFileName));
 			BufferedWriter comment = new BufferedWriter(new FileWriter(commentFileName));
+					
 					String str=input.readLine();
 					while(str!=null)
 					{
